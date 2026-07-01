@@ -1,0 +1,24 @@
+# Datasets - exclude all data files
+*.parquet
+*.jsonl
+*.jsonl.tar.gz
+*.tar.gz
+*.csv
+*.tsv
+
+# Or exclude entire data folders (safer, catches everything inside them)
+CulturaX/
+MADLAD_400/
+
+# Python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Environment
+.env
+venv/
+env/
+
+# OS junk
+.DS_Store
