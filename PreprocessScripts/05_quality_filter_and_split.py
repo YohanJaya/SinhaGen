@@ -1,34 +1,24 @@
 """
-STEP 5 — Quality filter, dedupe, and train/val split.
+STEP 5 — Quality filter and dedupe (no split, JSONL only).
 
 - Drops exact duplicate documents (common when combining multiple
   source datasets).
 - Drops documents that are too short, or where too much of the content
   isn't actually Sinhala script (leftover junk/garbage records).
-- Shuffles and splits into train/validation sets.
-- Writes both JSONL (with metadata preserved) and plain .txt versions
-  (one document per block, blank-line separated) -- the .txt files are
-  what you'll typically feed into tokenizer/decoder pretraining.
+- Writes ONE final JSONL file with everything kept -- no train/val
+  split, no .txt output.
 
 Just run:  python3 05_quality_filter_and_split.py
 """
 
 import json
 import os
-import random
-import unicodedata as ud
 
 INPUT_FILE = os.path.expanduser("~/pipeline_step4_boilerplate_removed.jsonl")
-
-TRAIN_JSONL = os.path.expanduser("~/final_train.jsonl")
-VAL_JSONL = os.path.expanduser("~/final_val.jsonl")
-TRAIN_TXT = os.path.expanduser("~/final_train.txt")
-VAL_TXT = os.path.expanduser("~/final_val.txt")
+OUTPUT_FILE = os.path.expanduser("~/pipeline_step5_quality_filtered.jsonl")
 
 MIN_DOC_LENGTH = 50          # characters
 MIN_SINHALA_RATIO = 0.6      # fraction of non-space chars that must be Sinhala
-VAL_FRACTION = 0.05          # 5% held out for validation
-RANDOM_SEED = 42
 
 
 def sinhala_ratio(text: str) -> float:
@@ -79,31 +69,11 @@ def main():
     print(f"[Step 5] Dropped: {dropped_dupe} duplicates, "
           f"{dropped_short} too short, {dropped_low_ratio} low Sinhala ratio.")
 
-    random.seed(RANDOM_SEED)
-    random.shuffle(kept_records)
-
-    val_count = max(1, int(len(kept_records) * VAL_FRACTION))
-    val_records = kept_records[:val_count]
-    train_records = kept_records[val_count:]
-
-    with open(TRAIN_JSONL, 'w', encoding='utf-8') as f:
-        for r in train_records:
+    with open(OUTPUT_FILE, 'w', encoding='utf-8') as f:
+        for r in kept_records:
             f.write(json.dumps(r, ensure_ascii=False) + '\n')
 
-    with open(VAL_JSONL, 'w', encoding='utf-8') as f:
-        for r in val_records:
-            f.write(json.dumps(r, ensure_ascii=False) + '\n')
-
-    with open(TRAIN_TXT, 'w', encoding='utf-8') as f:
-        for r in train_records:
-            f.write(r['text'].strip() + '\n\n')
-
-    with open(VAL_TXT, 'w', encoding='utf-8') as f:
-        for r in val_records:
-            f.write(r['text'].strip() + '\n\n')
-
-    print(f"[Step 5] Train: {len(train_records)} docs -> {TRAIN_JSONL}, {TRAIN_TXT}")
-    print(f"[Step 5] Val:   {len(val_records)} docs -> {VAL_JSONL}, {VAL_TXT}")
+    print(f"[Step 5] Wrote {len(kept_records)} records -> {OUTPUT_FILE}")
 
 
 if __name__ == '__main__':
