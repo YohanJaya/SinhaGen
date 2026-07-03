@@ -21,7 +21,7 @@ import json
 import os
 import re
 
-INPUT_FILE = os.path.expanduser("~/~/pipeline_step6_emojis_removed.jsonl")
+INPUT_FILE = os.path.expanduser("~/pipeline_step6_emojis_removed.jsonl")
 OUTPUT_FILE = os.path.expanduser("~/pipeline_step7_clean_whitespace.jsonl")
 
 MULTI_SPACE_RE = re.compile(r'[ \t]{2,}')
