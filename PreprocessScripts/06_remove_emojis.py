@@ -1,17 +1,15 @@
 """
-POST-STEP — Remove emojis from the already-finished final train/val files.
+POST-STEP — Remove emojis from the final quality-filtered dataset.
 
-Use this if you've already run the full pipeline (00 -> 05) and just
-want to strip emojis from the final output, without re-running
-everything else.
+Use this after running the full pipeline (00 -> 05) to strip emojis
+from the final combined dataset, without re-running everything else.
 
 Protects Sinhala's zero-width joiner (ZWJ) the same way as before: a
 ZWJ is only removed when it sits directly between two emoji
 characters, never when it's part of a Sinhala conjunct letter.
 
-This writes NEW files (doesn't overwrite your existing final_train /
-final_val), then also regenerates the matching .txt versions from the
-cleaned JSONL so both formats stay in sync.
+Writes a NEW file (doesn't overwrite your existing input), plus a
+matching .txt version.
 
 Just run:  python3 remove_emojis_from_final.py
 """
@@ -20,15 +18,9 @@ import json
 import os
 import re
 
-FILES = [
-    # (input_jsonl, output_jsonl, output_txt)
-    (os.path.expanduser("~/final_train.jsonl"),
-     os.path.expanduser("~/final_train_no_emoji.jsonl"),
-     os.path.expanduser("~/final_train_no_emoji.txt")),
-    (os.path.expanduser("~/final_val.jsonl"),
-     os.path.expanduser("~/final_val_no_emoji.jsonl"),
-     os.path.expanduser("~/final_val_no_emoji.txt")),
-]
+INPUT_FILE = os.path.expanduser("~/pipeline_step5_quality_filtered.jsonl")
+OUTPUT_JSONL = os.path.expanduser("~/pipeline_step6_emojis_removed.jsonl")
+
 
 ZWJ = '\u200d'
 
@@ -63,13 +55,13 @@ def remove_emojis(text: str) -> str:
     return text
 
 
-def process(input_jsonl, output_jsonl, output_txt):
+def main():
     total = 0
     changed = 0
 
-    with open(input_jsonl, 'r', encoding='utf-8') as fin, \
-         open(output_jsonl, 'w', encoding='utf-8') as fout_json, \
-         open(output_txt, 'w', encoding='utf-8') as fout_txt:
+    with open(INPUT_FILE, 'r', encoding='utf-8') as fin, \
+         open(OUTPUT_JSONL, 'w', encoding='utf-8') as fout_json, \
+         open(OUTPUT_TXT, 'w', encoding='utf-8') as fout_txt:
 
         for line in fin:
             line = line.rstrip('\n')
@@ -91,18 +83,9 @@ def process(input_jsonl, output_jsonl, output_txt):
             fout_txt.write(record['text'].strip() + '\n\n')
             total += 1
 
-    print(f"Processed {total} records from {input_jsonl}, "
-          f"removed emojis from {changed}.")
-    print(f"  -> {output_jsonl}")
-    print(f"  -> {output_txt}")
-
-
-def main():
-    for input_jsonl, output_jsonl, output_txt in FILES:
-        if not os.path.exists(input_jsonl):
-            print(f"Skipping {input_jsonl} (not found).")
-            continue
-        process(input_jsonl, output_jsonl, output_txt)
+    print(f"Processed {total} records, removed emojis from {changed}.")
+    print(f"  -> {OUTPUT_JSONL}")
+    print(f"  -> {OUTPUT_TXT}")
 
 
 if __name__ == '__main__':
