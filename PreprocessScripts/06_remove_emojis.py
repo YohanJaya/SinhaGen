@@ -21,7 +21,6 @@ import re
 INPUT_FILE = os.path.expanduser("~/pipeline_step5_quality_filtered.jsonl")
 OUTPUT_JSONL = os.path.expanduser("~/pipeline_step6_emojis_removed.jsonl")
 
-
 ZWJ = '\u200d'
 
 EMOJI_RANGES = [
@@ -60,8 +59,7 @@ def main():
     changed = 0
 
     with open(INPUT_FILE, 'r', encoding='utf-8') as fin, \
-         open(OUTPUT_JSONL, 'w', encoding='utf-8') as fout_json, \
-         open(OUTPUT_TXT, 'w', encoding='utf-8') as fout_txt:
+         open(OUTPUT_JSONL, 'w', encoding='utf-8') as fout_json:
 
         for line in fin:
             line = line.rstrip('\n')
@@ -80,12 +78,10 @@ def main():
                 record['text'] = cleaned
 
             fout_json.write(json.dumps(record, ensure_ascii=False) + '\n')
-            fout_txt.write(record['text'].strip() + '\n\n')
             total += 1
 
     print(f"Processed {total} records, removed emojis from {changed}.")
     print(f"  -> {OUTPUT_JSONL}")
-    print(f"  -> {OUTPUT_TXT}")
 
 
 if __name__ == '__main__':
