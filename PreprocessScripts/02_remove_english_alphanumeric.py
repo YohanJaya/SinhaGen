@@ -1,5 +1,5 @@
 """
-STEP 0 — Remove English words and alphanumeric junk tokens.
+STEP 2 — Remove English words and alphanumeric junk tokens.
 
 Removes:
   - Pure English words (e.g. "Hello", "read", "AI")
@@ -13,23 +13,29 @@ Keeps:
     (years, quantities) so they are NOT removed by default. Change
     KEEP_PURE_NUMBERS below if you want those gone too.
 
-IMPORTANT: Your dataset uses a literal "\\n" (backslash + n) marker for
-line breaks inside the "text" field. A naive word-removal regex would
-treat the "n" in that marker as a standalone English word and delete
-it, corrupting the marker (this is exactly the bug we hit before).
-To prevent that, this script first converts any intact "\\n" marker
-into a real newline character -- before doing any word removal -- so
-the "n" is never exposed to the word-removal step in the first place.
+WHY THIS RUNS AFTER NEWLINE-FIXING (steps 0-1), NOT BEFORE:
+This step deletes any standalone run of ASCII letters, including a
+single orphaned letter like "n". If this ran before the newline-marker
+repair step, it would silently delete any already-broken "\\n" marker
+(one that lost its backslash from earlier corruption) as if it were
+ordinary English text -- permanently destroying that paragraph break.
+Running this AFTER steps 0-1 guarantees every line break is already a
+real newline character by the time this step's word-removal regex
+runs, so it can never be mistaken for text content.
 
-Just run:  python3 00_remove_english_alphanumeric.py
+The defensive `text.replace('\\n', '\n')` below is kept as a no-op
+safeguard in case this script is ever run standalone out of order --
+it has nothing to do if step 1 already ran first, as intended.
+
+Just run:  python3 02_remove_english_alphanumeric.py
 """
 
 import json
 import os
 import re
 
-INPUT_FILE = os.path.expanduser("~/combined_sinhala_dataset.jsonl")
-OUTPUT_FILE = os.path.expanduser("~/pipeline_step0_english_removed.jsonl")
+INPUT_FILE = os.path.expanduser("~/pipeline_step1_newlines_fixed.jsonl")
+OUTPUT_FILE = os.path.expanduser("~/pipeline_step2_english_removed.jsonl")
 
 KEEP_PURE_NUMBERS = True  # set False to also strip standalone digit runs
 
@@ -85,8 +91,8 @@ def main():
             fout.write(json.dumps(record, ensure_ascii=False) + '\n')
             total += 1
 
-    print(f"[Step 0] Processed {total} records, modified {changed}.")
-    print(f"[Step 0] Wrote: {OUTPUT_FILE}")
+    print(f"[Step 2] Processed {total} records, modified {changed}.")
+    print(f"[Step 2] Wrote: {OUTPUT_FILE}")
 
 
 if __name__ == '__main__':

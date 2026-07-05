@@ -1,5 +1,5 @@
 """
-STEP 10 — Clean stray backslash-escaping.
+STEP 12 — Clean stray backslash-escaping.
 
 Some scraped text ended up double-escaped, so quote marks that should be
 plain `"` characters are showing up as `\"`, e.g.:
@@ -76,8 +76,8 @@ def main():
             fout.write(json.dumps(record, ensure_ascii=False) + '\n')
             total += 1
 
-    print(f"[Step 10] Processed {total} records, cleaned backslashes in {changed}.")
-    print(f"[Step 10] Wrote: {OUTPUT_FILE}")
+    print(f"[Step 12] Processed {total} records, cleaned backslashes in {changed}.")
+    print(f"[Step 12] Wrote: {OUTPUT_FILE}")
 
 
 if __name__ == '__main__':

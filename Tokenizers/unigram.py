@@ -44,7 +44,7 @@ import sentencepiece as spm
 PARAM_GRID = {
     "vocab_size": [4000, 8000, 16000, 32000, 48000, 64000],
     "max_sentencepiece_length": [4,8, 16],
-    "num_sub_iterations": [3],
+    "num_sub_iterations": [3]
 }
 
 

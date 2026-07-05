@@ -1,13 +1,21 @@
 """
-STEP 1 — Fix broken newline markers.
+STEP 1 — Fix broken newline markers. Runs right after Unicode
+normalization, and BEFORE any word-removal step.
 
 Your raw dataset uses a literal two-character marker "\\n" (backslash + n)
 inside the "text" field to represent line breaks. An earlier cleaning
 pass stripped stray backslashes as junk symbols, which turned some of
 these markers into an orphan "n" (and "\\n\\n" paragraph breaks into
-"nn"). Since English words/letters were already removed in an earlier
-step, any standalone "n" left in otherwise-Sinhala text is almost
-certainly one of these broken markers, not real content.
+"nn").
+
+WHY THIS MUST RUN BEFORE ENGLISH/JUNK-WORD REMOVAL:
+If a later step removes standalone runs of English letters, it will
+treat any orphaned "n" left over from a broken marker as ordinary
+English text and delete it -- permanently destroying that paragraph
+break with no way to recover it afterward. Running this repair step
+first, so every marker (intact or already-broken) becomes a real
+newline character before any word-removal regex ever sees the text,
+prevents that from happening.
 
 This script:
   1. Converts any INTACT "\\n" / "\\n\\n" markers into real newline
@@ -23,7 +31,7 @@ import json
 import os
 import re
 
-INPUT_FILE = os.path.expanduser("~/pipeline_step0b_emojis_removed.jsonl")
+INPUT_FILE = os.path.expanduser("~/pipeline_step0_unicode_normalized.jsonl")
 OUTPUT_FILE = os.path.expanduser("~/pipeline_step1_newlines_fixed.jsonl")
 
 # Orphaned "n" or "nn" not adjacent to any other Latin letter.

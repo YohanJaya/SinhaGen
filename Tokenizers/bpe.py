@@ -100,9 +100,10 @@ import sentencepiece as spm
 # Add/remove values from these lists to change what gets searched.
 # ---------------------------------------------------------------------------
 PARAM_GRID = {
-    "vocab_size": [8000, 16000, 32000],
-    "max_sentencepiece_length": [16],
+    "vocab_size": [4000, 8000, 16000, 32000, 48000, 64000],
+    "max_sentencepiece_length": [4, 8, 16]
 }
+
 
 
 def build_param_combinations(grid: dict) -> list:

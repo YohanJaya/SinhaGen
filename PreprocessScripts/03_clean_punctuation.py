@@ -19,7 +19,7 @@ import os
 import re
 import unicodedata as ud
 
-INPUT_FILE = os.path.expanduser("~/pipeline_step2_unicode_normalized.jsonl")
+INPUT_FILE = os.path.expanduser("~/pipeline_step2_english_removed.jsonl")
 OUTPUT_FILE = os.path.expanduser("~/pipeline_step3_punctuation_cleaned.jsonl")
 
 ZWJ = '\u200d'

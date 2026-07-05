@@ -1,5 +1,5 @@
 """
-STEP 2 — Unicode normalization (NFC).
+STEP 0 — Unicode normalization (NFC). RUNS FIRST.
 
 Sinhala conjunct/vowel-sign sequences can sometimes be represented by
 different (but visually identical) sequences of Unicode code points
@@ -8,18 +8,22 @@ tokenizer will learn the "same" character as multiple different token
 sequences, hurting training quality.
 
 NFC (Canonical Composition) normalization makes sure every string uses
-one consistent representation. This is a standard, safe step for any
-text going into tokenizer training.
+one consistent representation. This runs FIRST, before any other
+cleaning step, so every later regex/character-class check in this
+pipeline operates on one consistent character representation from the
+very start. It's safe to run before newline-marker repair too --
+normalization only touches Unicode combining sequences, never the
+plain ASCII backslash/n characters used in the "\\n" line-break marker.
 
-Just run:  python3 02_normalize_unicode.py
+Just run:  python3 00_normalize_unicode.py
 """
 
 import json
 import os
 import unicodedata
 
-INPUT_FILE = os.path.expanduser("~/pipeline_step1_newlines_fixed.jsonl")
-OUTPUT_FILE = os.path.expanduser("~/pipeline_step2_unicode_normalized.jsonl")
+INPUT_FILE = os.path.expanduser("~/combined_sinhala_dataset.jsonl")
+OUTPUT_FILE = os.path.expanduser("~/pipeline_step0_unicode_normalized.jsonl")
 
 
 def main():
@@ -48,8 +52,8 @@ def main():
             fout.write(json.dumps(record, ensure_ascii=False) + '\n')
             total += 1
 
-    print(f"[Step 2] Processed {total} records, normalized {changed}.")
-    print(f"[Step 2] Wrote: {OUTPUT_FILE}")
+    print(f"[Step 0] Processed {total} records, normalized {changed}.")
+    print(f"[Step 0] Wrote: {OUTPUT_FILE}")
 
 
 if __name__ == '__main__':

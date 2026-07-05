@@ -19,8 +19,8 @@ import os
 import re
 import unicodedata as ud
 
-INPUT_FILE = os.path.expanduser("~/pipeline_step7_unicode_normalized.jsonl")
-OUTPUT_FILE = os.path.expanduser("~clear")
+INPUT_FILE = os.path.expanduser("~/pipeline_step7_clean_whitespace.jsonl")
+OUTPUT_FILE = os.path.expanduser("~/pipeline_step8_punctuation_cleaned2.jsonl")
 
 ZWJ = '\u200d'
 ZWNJ = '\u200c'
