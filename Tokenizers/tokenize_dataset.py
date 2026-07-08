@@ -29,7 +29,7 @@ import sentencepiece as spm
 
 # =============================================================================
 # CONFIG -- edit this block for your setup
-# =============================================================================VolunteerProject
+# =============================================================================
 
 # --- Path to the tokenizer model you selected as "best" ---
 TOKENIZER_MODEL_PATH = "tuning_unigram/unigram_v16000_l16_i3.model"

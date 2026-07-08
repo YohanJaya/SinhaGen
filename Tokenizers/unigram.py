@@ -39,15 +39,11 @@ import sentencepiece as spm
 # Every combination of these values will be trained and evaluated.
 # Add/remove values from these lists to change what gets searched.
 # ---------------------------------------------------------------------------
-
-
 PARAM_GRID = {
     "vocab_size": [4000, 8000, 16000, 32000, 48000, 64000],
     "max_sentencepiece_length": [4,8, 16],
-    "num_sub_iterations": [3]
+    "num_sub_iterations": [3],
 }
-
-
 
 
 def build_param_combinations(grid: dict) -> list:
@@ -238,7 +234,7 @@ def select_best(results: list) -> dict:
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--input", default="../pipeline_step12_backslashes_cleaned.jsonl",
+    parser.add_argument("--input", default="../pipeline_step14_sinhala_only.jsonl",
                          help="Path to the JSONL dataset (default: file in project root, one level above tokenizers/)")
     parser.add_argument("--val_input", default=None, help="Optional separate held-out file; if omitted, auto-splits --input")
     parser.add_argument("--out_dir", default="tuning_unigram")
