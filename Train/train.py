@@ -142,8 +142,8 @@ def parse_args():
                          "training")
     p.add_argument("--weight_decay", type=float, default=0.1)
     p.add_argument("--logging_steps", type=int, default=10)
-    p.add_argument("--eval_steps", type=int, default=200)
-    p.add_argument("--save_steps", type=int, default=200)
+    p.add_argument("--eval_steps", type=int, default=5000)
+    p.add_argument("--save_steps", type=int, default=5000)
     p.add_argument("--seed", type=int, default=42)
     return p.parse_args()
 

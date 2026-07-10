@@ -50,7 +50,7 @@ Latin-script assumptions) actively harmful if applied carelessly:
 
 **Combining marks are separate Unicode characters.**
 Vowel signs, the virama (*hal kirīma*), and the anusvaraya/visargaya are
-not part of the base letter — they are distinct Unicode codepoints in
+not part of the base letter, they are distinct Unicode codepoints in
 categories `Mn` (non-spacing mark) and `Mc` (spacing combining mark)
 layered onto a base consonant. A cleaning step that only protects
 "letters" (Unicode category `Lo`) and treats everything else as
@@ -59,7 +59,7 @@ vowel sign.
 
 **Conjunct consonants rely on an invisible joining character.**
 Certain consonant clusters — for example the ligature in `ශ්‍රී` (as in
-`ශ්‍රී ලංකාව`) — are formed using the Zero Width Joiner (`U+200D`)
+`ශ්‍රී ලංකාව`) are formed using the Zero Width Joiner (`U+200D`)
 between two letters. This is a real structural character, not a
 formatting artifact, even though it produces no visible glyph of its
 own and falls *outside* the main Sinhala Unicode block. Any cleaning
@@ -116,11 +116,11 @@ downstream step produces unexpected results.
 
 | # | Script | Purpose |
 |---|--------|---------|
-| 00 | `00_normalize_unicode.py` | Applies NFC (Canonical Composition) Unicode normalization. Ensures every visually-identical Sinhala character sequence is represented by the same sequence of codepoints, regardless of which source website/scraper originally produced it. Runs first because it is independent of every other step and establishes a consistent baseline for all subsequent regex/character-class logic. |
+| 00  | `00_normalize_unicode.py` | Applies NFC (Canonical Composition) Unicode normalization. Ensures every visually-identical Sinhala character sequence is represented by the same sequence of codepoints, regardless of which source website/scraper originally produced it. Runs first because it is independent of every other step and establishes a consistent baseline for all subsequent regex/character-class logic. | 
 | 01 | `01_fix_broken_newlines.py` | Converts the literal two-character `\n` marker into a real newline character. Also repairs documents where that marker was already damaged by earlier processing (backslash stripped, leaving an orphan `n`/`nn`). Runs before any word-removal step — see [Design Decisions](#design-decisions-and-rationale) for why order matters here. |
 | 02 | `02_remove_english_alphanumeric.py` | Removes standalone English words and garbled alphanumeric tokens (e.g. `iPhone13`, `234FGH`) that appear mixed into otherwise-Sinhala text. Pure numeric tokens are preserved by default, since years/quantities are often meaningful content. |
 | 03 | `03_clean_punctuation.py` | Removes empty bracket leftovers (`()`, `[ ]`) created by earlier link/citation stripping, and collapses runs of repeated or mixed punctuation (`...`, `?!`, `--`) down to a single mark. Explicitly protects Sinhala combining marks and the zero-width joiner from being treated as removable punctuation. |
-| 04 | `04_remove_boilerplate.py` | Identifies lines that repeat across an unusually large number of distinct documents (site navigation, footers, comment-widget text) and strips them. Uses a document-frequency threshold rather than raw occurrence count, so genuinely common short phrases aren't mistaken for template boilerplate. |
+| 04 | `04_remove_boilerplate.py` | Identifies lines that repeat across an unusually large number of distinct documents (site navigation, footers, comment-widget text) and strips them. Uses a document-frequency (If a sentence occurs in many documents than the threshold it will be removed) threshold rather than raw occurrence count, so genuinely common short phrases aren't mistaken for template boilerplate. |
 | 05 | `05_quality_filter_and_split.py` | Drops exact-duplicate documents, documents below a minimum length, and documents where the proportion of Sinhala-script characters falls below a quality threshold (a proxy for "this record is mostly non-Sinhala junk"). |
 | 06 | `06_remove_emojis.py` | Removes emoji character sequences, including multi-codepoint emoji joined with ZWJ (e.g. family/flag emoji). Distinguishes emoji-joining ZWJ from Sinhala-conjunct ZWJ by only stripping a ZWJ when it sits directly between two emoji codepoints. |
 | 07 | `07_clean_whitespace.py` | Collapses repeated spaces/tabs, converts non-breaking spaces to regular spaces, and trims leading/trailing whitespace at both the line and document level. |

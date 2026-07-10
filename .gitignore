@@ -22,3 +22,6 @@ env/
 
 # OS junk
 .DS_Store
+
+wandb/
+checkpoints/
