@@ -42,15 +42,13 @@ To keep the analysis clear and space-efficient, the curves (*Combined Overview*,
 
 ### Run Summary Grid (At-a-Glance)
 
-````carousel
 | Run 1 (lr=3e-4, 3 Epochs) | Run 4 (lr=1e-4, 3 Epochs) | Run 5 (lr=3e-4, 4 Epochs) |
 | :---: | :---: | :---: |
 | ![Run 1](run1/image.png) | ![Run 4](run4/image.png) | ![Run 5](run5/image.png) |
-<!-- slide -->
+
 | Run 2 (lr=1e-2, 1 Epoch - Killed) | Run 3 (lr=1e-2, 3 Epochs - Killed) |
 | :---: | :---: |
 | ![Run 2](run2/image.png) | ![Run 3](run3/image.png) |
-````
 
 ---
 
