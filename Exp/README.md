@@ -38,65 +38,84 @@ We conducted five distinct pretraining runs with varying learning rates, epochs,
 
 ## Loss Curves and Visualizations
 
-To keep the analysis clear and space-efficient, the curves (*Combined Overview*, *Train Loss*, and *Eval Loss*) for each run are presented side-by-side.
-
-### Run Summary Grid (At-a-Glance)
-
-| Run 1 (lr=3e-4, 3 Epochs) | Run 4 (lr=1e-4, 3 Epochs) | Run 5 (lr=3e-4, 4 Epochs) |
-| :---: | :---: | :---: |
-| ![Run 1](run1/image.png) | ![Run 4](run4/image.png) | ![Run 5](run5/image.png) |
-
-| Run 2 (lr=1e-2, 1 Epoch - Killed) | Run 3 (lr=1e-2, 3 Epochs - Killed) |
-| :---: | :---: |
-| ![Run 2](run2/image.png) | ![Run 3](run3/image.png) |
+To ensure W&B charts, subplots, and numeric labels are fully readable in the Markdown viewer, the plots for each run are presented sequentially in full size.
 
 ---
 
 ### Run 1: Standard Search (`3e-4`, 3 Epochs)
+
 - **Train Loss**: Starts high (~9.6) and drops smoothly down to `~3.7` at step 3000.
 - **Validation Loss**: Tracks the training loss closely without rising, indicating stable generalization.
 - **Visuals**:
 
-| Combined Panel (`image.png`) | Train Loss (`train.png`) | Eval Loss (`eval.png`) |
-| :---: | :---: | :---: |
-| ![Run 1 Combined](run1/image.png) | ![Run 1 Train](run1/train.png) | ![Run 1 Eval](run1/eval.png) |
+#### Run Details & W&B Metrics Summary:
+![Run 1 Summary Metadata](run1/image.png)
+
+#### Training Loss & Step Metrics:
+![Run 1 Train Charts](run1/train.png)
+
+#### Evaluation Metrics:
+![Run 1 Eval Charts](run1/eval.png)
 
 ---
 
 ### Run 2 & Run 3: Over-aggressive Learning Rate (`1e-2`, Killed Mid-Run)
+
 - **Behavior**: The learning rate of `1e-2` is too large. Oversized weight adjustments cause gradient explosion. The cross-entropy loss increases rapidly over time or oscillates heavily. Shows severe divergence.
 - **User Action**: Manually terminated early during training.
-- **Visuals**:
+- **Visuals (Run 2)**:
 
-#### Run 2:
-| Combined Panel (`image.png`) | Train Loss (`train.png`) | Eval Loss (`eval.png`) |
-| :---: | :---: | :---: |
-| ![Run 2 Combined](run2/image.png) | ![Run 2 Train](run2/train.png) | ![Run 2 Eval](run2/eval.png) |
+#### Run 2 Details & W&B Summary:
+![Run 2 Summary Metadata](run2/image.png)
 
-#### Run 3:
-| Combined Panel (`image.png`) | Train Loss (`train.png`) | Eval Loss (`eval.png`) |
-| :---: | :---: | :---: |
-| ![Run 3 Combined](run3/image.png) | ![Run 3 Train](run3/train.png) | ![Run 3 Eval](run3/eval.png) |
+#### Run 2 Training Metrics:
+![Run 2 Train Charts](run2/train.png)
+
+#### Run 2 Evaluation Metrics:
+![Run 2 Eval Charts](run2/eval.png)
+
+- **Visuals (Run 3)**:
+
+#### Run 3 Details & W&B Summary:
+![Run 3 Summary Metadata](run3/image.png)
+
+#### Run 3 Training Metrics:
+![Run 3 Train Charts](run3/train.png)
+
+#### Run 3 Evaluation Metrics:
+![Run 3 Eval Charts](run3/eval.png)
 
 ---
 
 ### Run 4: Conservative Learning Rate (`1e-4`, 3 Epochs)
+
 - **Behavior**: A learning rate of `1e-4` is stable but moves too slowly. The loss drops but remains significantly higher than Run 1 at step 3000 (`~4.8` vs. `~3.7`).
 - **Visuals**:
 
-| Combined Overview (`image.png`) | Train Loss (`train.png`) | Eval Loss (`eval.png`) |
-| :---: | :---: | :---: |
-| ![Run 4 Combined](run4/image.png) | ![Run 4 Train](run4/train.png) | ![Run 4 Eval](run4/eval.png) |
+#### Run 4 Details & W&B Summary:
+![Run 4 Summary Metadata](run4/image.png)
+
+#### Run 4 Training Metrics:
+![Run 4 Train Charts](run4/train.png)
+
+#### Run 4 Evaluation Metrics:
+![Run 4 Eval Charts](run4/eval.png)
 
 ---
 
 ### Run 5: The Champion Run (`3e-4`, 4 Epochs)
+
 - **Behavior**: Extended Run 1 for one additional epoch. Loss decay continued steadily, with training loss hitting a minimum at the final step and evaluation loss stabilizing at its lowest level without overfitting.
 - **Visuals**:
 
-| Combined Panel (`image.png`) | Train Loss (`train.png`) | Eval Loss (`eval.png`) |
-| :---: | :---: | :---: |
-| ![Run 5 Combined](run5/image.png) | ![Run 5 Train](run5/train.png) | ![Run 5 Eval](run5/eval.png) |
+#### Run 5 Details & W&B Summary:
+![Run 5 Summary Metadata](run5/image.png)
+
+#### Run 5 Training Metrics:
+![Run 5 Train Charts](run5/train.png)
+
+#### Run 5 Evaluation Metrics:
+![Run 5 Eval Charts](run5/eval.png)
 
 ---
 
